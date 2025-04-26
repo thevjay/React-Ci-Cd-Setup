@@ -9,6 +9,7 @@ on:
 jobs:
     deploy:
         runs-on: ubuntu-latest
+        environment: production
 
         steps:
             - name: "Setup nodejs"
@@ -23,9 +24,9 @@ jobs:
               uses: actions/download-artfact@v4
               with:
                 name: build
+                run-id: ${{ github.event.workflow_run.id}}
+                github-token: ${{ github.token}}
 
             - name: "Deploy to vercel"
-              run: vercel --prod --token=$VERCEL_TOKEN --confirm
-              env:
-                VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN}}
+              run: vercel --prod --token=${{ secrets.VERCEL_TOKEN}} --confirm --name=cicdproject
             
